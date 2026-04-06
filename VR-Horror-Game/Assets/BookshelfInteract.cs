@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class BookshelfInteract : MonoBehaviour
 {
@@ -7,28 +8,24 @@ public class BookshelfInteract : MonoBehaviour
     private Transform player;
     private bool playerInRange = false;
 
+    [Header("Jumpscare")]
+    public GameObject jumpscareImage;
+    public AudioSource jumpscareSound;
+    public float jumpscareDuration = 2f;
+    private bool hasJumpscared = false;
+
     void Start()
     {
-        // Finds your player automatically by tag
         player = GameObject.FindWithTag("Player").transform;
+        jumpscareImage.SetActive(false);
     }
 
     void Update()
     {
-        // Check distance between player and bookshelf
         float distance = Vector3.Distance(transform.position, player.position);
+        playerInRange = distance <= interactRange;
 
-        if (distance <= interactRange)
-        {
-            playerInRange = true;
-        }
-        else
-        {
-            playerInRange = false;
-        }
-
-        // If in range and E is pressed
-        if (playerInRange && Keyboard.current.eKey.wasPressedThisFrame)
+        if (playerInRange && Keyboard.current.eKey.wasPressedThisFrame && !hasJumpscared)
         {
             Interact();
         }
@@ -36,11 +33,21 @@ public class BookshelfInteract : MonoBehaviour
 
     void Interact()
     {
-        // Put whatever you want to happen here
-        Debug.Log("You interacted with the bookshelf!");
+        hasJumpscared = true;
+        StartCoroutine(Jumpscare());
     }
 
-    // Draws the range as a sphere in the Scene view so you can see it
+    IEnumerator Jumpscare()
+    {
+        // Show image and play sound
+        jumpscareImage.SetActive(true);
+        jumpscareSound.Play();
+
+        // Wait then hide it
+        yield return new WaitForSeconds(jumpscareDuration);
+        jumpscareImage.SetActive(false);
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
