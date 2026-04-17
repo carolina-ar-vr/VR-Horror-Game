@@ -150,10 +150,18 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.postprocessing": {
+<<<<<<< HEAD
       "version": "3.5.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
+=======
+      "version": "3.5.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.imgui": "1.0.0",
+>>>>>>> 6b177eb1f68a749b5113fd24e96e9e26a6c7aaec
         "com.unity.modules.physics": "1.0.0"
       },
       "url": "https://packages.unity.com"
